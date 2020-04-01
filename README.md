@@ -117,11 +117,14 @@ Epsilon_min = 0.05
 Let's see the results for different number of rows = {3,4,5}. (num_games = 50'000)
 In the game, p1 plays always as first player.
 
-**3 rows**: 
+**3 rows**:
+
 ![image_3](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/output_avg_reward_3_10000_games.png)
+
 As we can see, in the 3-rows game the first player is going to lose every match. We can prove it that this is true also by theory of combinatory game: with 3 rows and just 6 objects, the tree of moves is quite small. 
 
 **4 rows**: 
+
 ![image_4](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/output_avg_reward_4_10000_games.png)
 
 Differently from the first case, in the 4-rows game the first player is going to win the matches.
@@ -129,12 +132,15 @@ This is basically true because, if the player p1 starts with a move that erase a
 
 
 **5 rows**: 
+
 ![image_5](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/output_avg_reward_5_10000_games.png)
 
 And finally the most difficult case: with 5 rows, we have a lot of different states (n=132) and the problem start to become interesting. Also here the p1 is going to win.
 
 **6 rows**: 
+
 ![image_6](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/output_avg_reward_6_10000_games.png)
+
 (429 states)
 
 An interesting question now could be: can we use the knowledge of games with smaller number of rows (3,4,5) to gain knowledge for the bigger cases (like 6 or more)? 
@@ -143,6 +149,7 @@ How much time (in terms of games played) can I save with this method?
 ### Can we transfer learning to game with bigger N_ROWS ?
 
 As said before, we can use for example policy from `number_rows = 5` to speed up the learning of games with `number_rows = 6`. 
+
 ![image_6_from5](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/output_avg_reward_6_10000_games_from5.png)
 
 ### Result of transfer learning
