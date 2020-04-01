@@ -12,7 +12,7 @@ This work is inspired by https://towardsdatascience.com/reinforcement-learning-i
 
 For example, N_rows = 5, object = {1,2,3,4,5}
 
-![image_nim](https://github.com/danielececcarelli/Q-Learning-RL-Game-Of-Nim/blob/master/images/Example-game-of-Nim-1-2-3-4-5-Each-row-represents-a-heap-Players-choose-a-row-and.png)
+![image_nim](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/Example-game-of-Nim-1-2-3-4-5-Each-row-represents-a-heap-Players-choose-a-row-and.png)
 
 In this initial implementation, I have decided to set the number of rows to 5, and the initial state of the game is:
 
@@ -110,7 +110,7 @@ def loadPolicy_from_previous_cases(self, file, n_previous_cases, n_rows):
 
 Epsilon_min = 0.05
 
-![image_epsilon](https://github.com/danielececcarelli/Q-Learning-RL-Game-Of-Nim/blob/master/images/epsilon-1.png)
+![image_epsilon](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/epsilon-1.png)
 
 ### Results of training
 
@@ -118,31 +118,41 @@ Let's see the results for different number of rows = {3,4,5}. (num_games = 50'00
 In the game, p1 plays always as first player.
 
 **3 rows**: 
-![image_3](https://github.com/danielececcarelli/Q-Learning-RL-Game-Of-Nim/blob/master/images/output_avg_reward_3-1.png)
-
-As we can see, in the 3-rows game the first player is going to lose every match. We can prove it that this is true also by theory of combinatory game: with 3 rows and just 6 objects, the tree of moves is quite small. In the first games we can see that p1 has bigger rewards (probaly because it has the first move), but with the time p2 is definitely going to win every matches.
-
+![image_3](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/output_avg_reward_3_10000_games.png)
+As we can see, in the 3-rows game the first player is going to lose every match. We can prove it that this is true also by theory of combinatory game: with 3 rows and just 6 objects, the tree of moves is quite small. 
 
 **4 rows**: 
-![image_4](https://github.com/danielececcarelli/Q-Learning-RL-Game-Of-Nim/blob/master/images/output_avg_reward_4-1.png)
+![image_4](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/output_avg_reward_4_10000_games.png)
 
 Differently from the first case, in the 4-rows game the first player is going to win the matches.
 This is basically true because, if the player p1 starts with a move that erase all the objects in the 4-th row, the player p2 comes in a situation of 3-rows games, and we know that starting from that position will make you lose the match. And of course this move is often the first move that player p1 will make. 
 
 
 **5 rows**: 
-![image_5](https://github.com/danielececcarelli/Q-Learning-RL-Game-Of-Nim/blob/master/images/output_avg_reward_5-1.png)
+![image_5](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/output_avg_reward_5_10000_games.png)
 
 And finally the most difficult case: with 5 rows, we have a lot of different states (n=132) and the problem start to become interesting. Also here the p1 is going to win.
 
+**6 rows**: 
+![image_6](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/output_avg_reward_6_10000_games.png)
+(429 states)
 
-An interesting question now could be: can we use the knowledge of games with smaller number of rows (3,4) to gain knowledge for the bigger cases (like 5 or more)? 
+An interesting question now could be: can we use the knowledge of games with smaller number of rows (3,4,5) to gain knowledge for the bigger cases (like 6 or more)? 
 How much time (in terms of games played) can I save with this method?
 
 ### Can we transfer learning to game with bigger N_ROWS ?
 
-As said before, we can use for example policy from `number_rows = 3` to speed up the learning of games with `number_rows = 5`. Here the result with just n_games = 25'000 (instead of 50'000 as in the previous case).
+As said before, we can use for example policy from `number_rows = 5` to speed up the learning of games with `number_rows = 6`. 
+![image_6_from5](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/output_avg_reward_6_10000_games_from5.png)
 
-![image_5_from3](https://github.com/danielececcarelli/Q-Learning-RL-Game-Of-Nim/blob/master/images/output_avg_reward_5_from3-1.png)
+### Result of transfer learning
+
+![prima_prova](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_primaprova.png)
+![seconda_prova](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_secondaprova.png)
+![terza_prova](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_terzaprova.png)
+![quarta_prova](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_quartaprova.png)
+![quinta_prova](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_quintaprova.png)
+
+
 
 
