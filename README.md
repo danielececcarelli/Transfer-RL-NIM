@@ -1,4 +1,4 @@
-# Q-Learning Reinforcement Learning  for the game of NIM
+# Reinforcement Learning  for the game of NIM
 
 #### Author : Daniele Ceccarelli
 
