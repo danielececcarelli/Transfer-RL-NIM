@@ -1,6 +1,6 @@
 # Q-Learning Reinforcement Learning  for the game of NIM
 
-### Reinforcement Learning to solve the game of NIM (https://en.wikipedia.org/wiki/Nim)
+## Reinforcement Learning to solve the game of NIM (https://en.wikipedia.org/wiki/Nim)
 
 The aim of this project is to train the computer to play against human in the game of NIM. In particular, the final aim of this project will be to try to "transfer" the learning for playing the game with different rows.
 
@@ -28,7 +28,9 @@ In this initial implementation, I have decided to set the number of rows to 5, a
 
 The player that take away the last "o" win the game.
 
-### States Representation
+# States Representation
+
+### Board and Moves
 
 Boards of game are represented in our algorithm as an array of length `number_rows` and is initially defined as:
 ```python
@@ -74,22 +76,81 @@ we can use only the one that is sorted ([0,1]); in this way we have just :
 5 states against 8 without sorting. And this difference increase with `number_rows`.
 With `number_rows = 3` we can manage to keep just 14 states against 24 without this technique. 
 
-### Number of States
+### Number of Different States
 
 Soon (plot of number of states vs `number_rows`)
 
-### Q-learning dict
 
+# Exploring-Exploiting tradeoff
+
+### Epsilon search 
+
+How do we decide when it is time to explore new states (exploring) and when it is time to use 
+our best strategy so far (exploiting) ?
+
+We use a simple Epsilon search algorithm: at every iteration (or in other words, at every move in a game, 
+and at every game in a range of n_rounds) sample u from a Uniform(0,1), and :
+
+- if u > epsilon(game, parameters) 
+        -> EXPLOITING
+        
+- else
+        -> EXPLORING
+        
+where epsilon has an exponential decreasing with respect to the game in the range on n_rounds with this parameter:
+
+#### Epsilon = max(epsilon_min, (exp_rate * exp(-episode * decay_rate)))
+
+where :
+- episode = number of that game / number of total games to be play (goes from 0 to 1)
+- epsilon_min = 0.05
+- exp_rate = 0.99
+- decay_rate = 5
+
+![image_epsilon](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/epsilon-1.png)
+
+
+# Q-learning algorithm
+
+### States-Value Dictionary
+
+To collect the pair states-value, we use a python dict in the Player class :
+`self.states_value = {}`.
+
+In this dict we use as key the position of the current board (for example '[0,0,0]') transformed to string and the value associated is the current value in terms of reward of that particular state (in this example the value will be >0 because if you left the board with 
+the state [0,0,0] you have win the game).
 
 ### Reward and Update state
 
-### Transfer the Learning from different number_rows games
+If the agent win the game, he will be rewarded with a +1, otherwise -1; we collect the history of all the games and who win
+the `self.win_games = []` for each of the two player that are play (p1 and p2): after the learning phase, p1.win_games and p2.win_games
+will be a sequence of +1 or -1, and of course if p1.win_games[i]=+1 (so p1 win the i-th game), p2.win_games[i]=-1.
+
+But how can we use the information of player who win the game to update the current value of a state in `self.states_value` during learning?
+
+In this type of RL we can reward all the states used to win a game only after the end of the game using the Bellmann eq; for this reason we use FeedReward methon:
+
+```python
+# at the end of game, backpropagate and update states value
+    def feedReward(self, reward):
+        initial_reward = reward
+        for st in reversed(self.states): # all states used in that game
+            if self.states_value.get(st) is None: # if this is the first time we have used that state
+                self.states_value[st] = 0
+            # Bellmann Equation    
+            self.states_value[st] += self.lr * (initial_reward + self.decay_gamma * reward - self.states_value[st])
+            reward = self.states_value[st]
+```
+
+
+# Transfer the Learning from different number_rows games
 
 In order to re-use the policy from games with a smaller number of rows, we can simply add zeros in front of the keys.
 
-for example, if we have in our dict `states_value` the pair key-value of states_value[0,2,2] = 0.9 from a previous learning 
-experience for the case of `number_rows = 3`, we can reuse it in case of `number_rows = 4` by just setting:
-states_value[0,0,2,2] = 0.9
+for example, if we have in our dict `states_value` the pair key-value of states_value('[0,2,2]') = 0.9 from a previous learning 
+experience for the case of `number_rows = 3`, we can reuse it in case of `number_rows = 4` by just setting :
+
+states_value('[0,0,2,2]') = 0.9
 
 ```python
 # load the policy to play against human    
@@ -114,31 +175,6 @@ def loadPolicy_from_previous_cases(self, file, n_previous_cases, n_rows):
 
         self.states_value = tmp
 ```
-
-### Epsilon search (Exploring-Exploiting tradeoff)
-
-How do we decide when it is time to explore new states (exploring) and when it is time to use 
-our best strategy so far (exploiting) ?
-
-We use a simple Epsilon search algorithm: at every iteration (or in other words, at every move in a game, and at every game in a range
-of n_rounds) sample u from a Uniform(0,1), and:
-
-if u > epsilon(game, parameters) 
-        -> EXPLOITING
-else
-        -> EXPLORING
-        
-where epsilon has an exponential decreasing with respect to the game in the range on n_rounds with this parameter:
-
-Epsilon = max(epsilon_min, (exp_rate * exp(-episode * decay_rate)))
-
-where:
-episode = number of that game / number of total games to be play (goes from 0 to 1)
-epsilon_min = 0.05
-exp_rate = 0.99
-decay_rate = 5
-
-![image_epsilon](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/epsilon-1.png)
 
 # Results of training
 
@@ -189,6 +225,9 @@ If we compare this plot with the previous of 6 rows we don't see much difference
 in the detail the speed-up that we can have using the learning of previous cases.
 
 # Result of transfer learning
+
+### Case of 6 rows using knowledge from 5 rows
+
 Let's analyze 5 sample of the same experiment (10000 rounds, learn to play 6 from 5, epsilon_min = 0.01).
 In the following images, we plot the % of winning games in the previous 2000 rounds, setting the reward = 1 if the agent 
 with that games, 0 otherwise. In the last part of the training we can expect that both the agent tends to the upperbound of 1,
