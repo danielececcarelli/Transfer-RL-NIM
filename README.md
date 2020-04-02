@@ -1,5 +1,7 @@
 # Q-Learning Reinforcement Learning  for the game of NIM
 
+#### Author : Daniele Ceccarelli
+
 ## Reinforcement Learning to solve the game of NIM (https://en.wikipedia.org/wiki/Nim)
 
 The aim of this project is to train the computer to play against human in the game of NIM. In particular, the final aim of this project will be to try to "transfer" the learning for playing the game with different rows.
@@ -90,6 +92,9 @@ With `number_rows = 3` we can manage to keep just 14 states against 24 without t
 
 Plot of number of different states vs `number_rows`
 
+![image_state](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/plot_states.png)
+
+As we can see, the curve follow a clear exponential growth.
 
 # Exploring-Exploiting tradeoff
 
