@@ -78,9 +78,18 @@ With `number_rows = 3` we can manage to keep just 14 states against 24 without t
 
 Soon (plot of number of states vs `number_rows`)
 
+### Q-learning dict
+
+
+### Reward and Update state
+
 ### Transfer the Learning from different number_rows games
 
 In order to re-use the policy from games with a smaller number of rows, we can simply add zeros in front of the keys.
+
+for example, if we have in our dict `states_value` the pair key-value of states_value[0,2,2] = 0.9 from a previous learning 
+experience for the case of `number_rows = 3`, we can reuse it in case of `number_rows = 4` by just setting:
+states_value[0,0,2,2] = 0.9
 
 ```python
 # load the policy to play against human    
@@ -106,16 +115,38 @@ def loadPolicy_from_previous_cases(self, file, n_previous_cases, n_rows):
         self.states_value = tmp
 ```
 
-### Epsilon search
+### Epsilon search (Exploring-Exploiting tradeoff)
 
-Epsilon_min = 0.05
+How do we decide when it is time to explore new states (exploring) and when it is time to use 
+our best strategy so far (exploiting) ?
+
+We use a simple Epsilon search algorithm: at every iteration (or in other words, at every move in a game, and at every game in a range
+of n_rounds) sample u from a Uniform(0,1), and:
+
+if u > epsilon(game, parameters) 
+        -> EXPLOITING
+else
+        -> EXPLORING
+        
+where epsilon has an exponential decreasing with respect to the game in the range on n_rounds with this parameter:
+
+Epsilon = max(epsilon_min, (exp_rate * exp(-episode * decay_rate)))
+
+where:
+episode = number of that game / number of total games to be play (goes from 0 to 1)
+epsilon_min = 0.05
+exp_rate = 0.99
+decay_rate = 5
 
 ![image_epsilon](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/epsilon-1.png)
 
-### Results of training
+# Results of training
 
-Let's see the results for different number of rows = {3,4,5}. (num_games = 50'000)
+Let's see the results for different number of rows = {3,4,5,6}. (num_games = 50'000)
 In the game, p1 plays always as first player.
+
+We plot the mean reward of the previous 1000 games. We recall that if the agent win, it gets as reward +1; 
+while it gets a -1 if it lose the game.
 
 **3 rows**:
 
@@ -135,16 +166,18 @@ This is basically true because, if the player p1 starts with a move that erase a
 
 ![image_5](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/output_avg_reward_5_10000_games.png)
 
-And finally the most difficult case: with 5 rows, we have a lot of different states (n=132) and the problem start to become interesting. Also here the p1 is going to win.
+And finally the most difficult cases: with 5 rows (and of course also with 6 rows), we have a lot of different states (n=132) and the problem start to become interesting. Also here the p1 is going to win.
 
 **6 rows**: 
 
 ![image_6](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/output_avg_reward_6_10000_games.png)
 
-(429 states)
+As in the case of 5 rows, with 6 rows and 429 different states to visit the problem become very interesting and challenging.
+The choice of epsilon-search parameters now is very important: we have to balance the trade-off of exploring new states 
+(that are a lot!) and exploting the best strategy.
 
-An interesting question now could be: can we use the knowledge of games with smaller number of rows (3,4,5) to gain knowledge for the bigger cases (like 6 or more)? 
-How much time (in terms of games played) can I save with this method?
+An interesting question now could be: can we use the knowledge of games with smaller number of rows (3,4 or 5) to gain knowledge for the bigger cases (like 6 or more)? 
+How much time (in terms of games played) can I save with this method? Is the learning curve faster with this method? 
 
 ### Can we transfer learning to game with bigger N_ROWS ?
 
@@ -152,13 +185,55 @@ As said before, we can use for example policy from `number_rows = 5` to speed up
 
 ![image_6_from5](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/output_avg_reward_6_10000_games_from5.png)
 
-### Result of transfer learning
+If we compare this plot with the previous of 6 rows we don't see much difference, probably the gain is not so big. Let's try to analyze
+in the detail the speed-up that we can have using the learning of previous cases.
+
+# Result of transfer learning
+Let's analyze 5 sample of the same experiment (10000 rounds, learn to play 6 from 5, epsilon_min = 0.01).
+In the following images, we plot the % of winning games in the previous 2000 rounds, setting the reward = 1 if the agent 
+with that games, 0 otherwise. In the last part of the training we can expect that both the agent tends to the upperbound of 1,
+when the agent wins all the previous 2000 games.
 
 ![prima_prova](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_primaprova.png)
+
 ![seconda_prova](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_secondaprova.png)
+
 ![terza_prova](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_terzaprova.png)
+
 ![quarta_prova](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_quartaprova.png)
+
 ![quinta_prova](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_quintaprova.png)
+
+As we can see, the results seem to be quite noisy, we don't see always a clear improvement of the learning curve "6_from_5" with respect
+to the classical "6". In the first 4 images we can see an improvement in using the knowledge of 5_rows case, while this is not
+true in the last plot. 
+
+We need to investigate this deeply; probably a good idea could be change the way we learn when we have the knowledge of smaller cases:
+let's analyze as example a case where we want to learn how to play with 3 rows using also the knowledge of 2 rows.
+We have all the state that we have seen before : 
+- [0,0]
+- [0,1]
+- [1,1]
+- [0,2]
+- [1,2]
+
+that now, in terms of states of 3_rows framework, becomes :
+- [0,0,0]
+- [0,0,1]
+- [0,1,1]
+- [0,0,2]
+- [0,1,2]
+
+If now, in one of our game, we reach these state, we don't need no more to learn how to move from this, so we don't
+need the "exploration" part of our epsilon-search algorithm, because we already know the best strategy of these states, and
+if we enter in one of these states, we stay up to the end of the game in this set of states (the states of 2_rows game).
+
+Of course this approach has some problem: 
+for example if our current state is [1,2,2] we can go in one the states of 2_rows game (in particular [0,1,2] ) but laso in
+other states, like [1,1,2] or [0,2,2], that don't belong to the set of states of 2_rows game. Which move should I take?
+This of course depends on the current value associated to each of the three states, but should we trust more in the value of
+[0,1,2] that we inherit from 2_rows learning respect to the other 2, where we are currently learning, especially when we are in the
+previous step of the games? 
 
 
 
