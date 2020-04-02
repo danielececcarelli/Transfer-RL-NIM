@@ -78,7 +78,17 @@ With `number_rows = 3` we can manage to keep just 14 states against 24 without t
 
 ### Number of Different States
 
-Soon (plot of number of states vs `number_rows`)
+| `number_rows`  | Number different states |
+| ------------- | ------------- |
+| 1 | 2 |
+| 2 | 5 |
+| 3 | 14 |
+| 4 | 42 |
+| 5 | 132 |
+| 6 | 429 |
+| 7 | 1430 |
+
+Plot of number of different states vs `number_rows`
 
 
 # Exploring-Exploiting tradeoff
