@@ -308,3 +308,48 @@ previous step of the games?
 ## Second Approach
 
 ### version 2.0
+
+In the new version of the algorithm (v2), we add a new member function in State class to check if a state of N rows
+belong also to a lower n rows cases.
+
+```python
+# check if the state is also from n_previous game
+def is_previous_state(self, n_previous):
+        skip = self.number_rows - n_previous -1
+        # self.board is already sorted
+        for i in range(n_previous+1):
+         if (self.board[i+skip]>i):
+             return 0
+        return 1
+```
+
+In this new approach to Transfer Learning in 6 rows game (with transfer learning from 5 rows), we choose to use a smaller 
+epsilon (for the epsilon-search algorithm) when we reach a state from 5-rows game, so when the is_previous_state(5)
+is True. We set a parameter for the division of the original epsilon to 3.
+
+Let's look at an example. We are learning with 10000 rounds, using the knowledge of 5-rows game to 
+gain knowledge for 6-rows game. 
+We are in the first steps of the "for loop", where epsilon is still big (for
+instance epsilon(i) = 0.9). When we reach in the "i-th" game a state belonging to 5-rows game (so, when 
+is_previous_state(5) is True), we change epsilon(i) with epsilon(i)/3 = 0.3
+
+This is the new definition of chooseAction:
+```python
+def chooseAction(self, moves, current_board, symbol, episode, divide = 1):
+        # if our random unif > epsilon
+        if np.random.uniform(0, 1) >= max(self.epsilon_min, (self.exp_rate * math.exp(-episode*self.decay_rate))/divide):
+```
+when ```divide = 1```, nothing change from the previous approach; while if ```divide = 3``` we are using the new approach.
+
+The result of this second approach (approach b) ) is bigger: we get a jumpstart and also a 
+learning speed improvement
+
+![prova_a](https://github.com/danielececcarelli/Transfer-Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_a.png)
+
+![prova_b](https://github.com/danielececcarelli/Transfer-Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_b.png)
+
+![prova_c](https://github.com/danielececcarelli/Transfer-Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_c.png)
+
+![prova_d](https://github.com/danielececcarelli/Transfer-Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_d.png)
+
+![prova_e](https://github.com/danielececcarelli/Transfer-Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_e.png)
