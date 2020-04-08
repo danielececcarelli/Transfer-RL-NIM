@@ -241,6 +241,18 @@ As said before, we can use for example policy from `number_rows = 5` to speed up
 If we compare this plot with the previous of 6 rows we don't see much difference, probably the gain is not so big. Let's try to analyze
 in the detail the speed-up that we can have using the learning of previous cases.
 
+What can we expect as "improvement" of transfer learning?
+
+In general, these are the three improvement that we can have:
+
+![image_improv](https://github.com/danielececcarelli/Transfer-Reinforcement-Learning-for-NIM-Game/blob/master/images/The-three-objectives-of-Transfer-Learning.png)
+
+(Image from Genevay, Aude & Laroche, Romain. (2016). Transfer Learning for User Adaptation in Spoken Dialogue Systems)
+
+In this particular example (NIM) we can only expect a jumpstart impr. or a learning speed impr., not
+a asymptotic impr. because we expect that our agent reach always the maximum he can afford, that is
+the knowledge of the perfect strategy.
+
 # Result of transfer learning
 
 ## First approach
