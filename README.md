@@ -1,8 +1,10 @@
-# Reinforcement Learning  for the game of NIM
+# Transfer in Reinforcement Learning  for the game of NIM
 
 #### Author : Daniele Ceccarelli
 
-## Reinforcement Learning to solve the game of NIM (https://en.wikipedia.org/wiki/Nim)
+## Reinforcement Learning to solve the game of NIM 
+
+(https://en.wikipedia.org/wiki/Nim)
 
 The aim of this project is to train the computer to play against human in the game of NIM. In particular, the final aim of this project will be to try to "transfer" the learning for playing the game with different rows.
 
@@ -241,6 +243,8 @@ in the detail the speed-up that we can have using the learning of previous cases
 
 # Result of transfer learning
 
+## First approach
+
 ### Case of 6 rows using knowledge from 5 rows
 
 Let's analyze 5 sample of the same experiment (10000 rounds, learn to play 6 from 5, epsilon_min = 0.01).
@@ -289,6 +293,6 @@ This of course depends on the current value associated to each of the three stat
 [0,1,2] that we inherit from 2_rows learning respect to the other 2, where we are currently learning, especially when we are in the
 previous step of the games? 
 
+## Second Approach
 
-
-
+### version 2.0
