@@ -341,8 +341,13 @@ def chooseAction(self, moves, current_board, symbol, episode, divide = 1):
 ```
 when ```divide = 1```, nothing change from the previous approach; while if ```divide = 3``` we are using the new approach.
 
-The result of this second approach (approach b) ) is bigger: we get a jumpstart and also a 
-learning speed improvement
+The result of this second approach (approach (b) ) is bigger: we get always a learning speed improvement and sometimes 
+also a jumpstart.
+
+# Comparison between the two different approach of Transfer Learning
+### 6: Learn 6-rows game from scratch
+### 6_from5_a : first approach
+### 6_from5_b : second approach
 
 ![prova_a](https://github.com/danielececcarelli/Transfer-Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_a.png)
 
