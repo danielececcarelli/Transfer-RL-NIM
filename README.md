@@ -127,7 +127,7 @@ where :
 ![image_epsilon](https://github.com/danielececcarelli/Reinforcement-Learning-for-NIM-Game/blob/master/images/epsilon-1.png)
 
 
-# Q-learning algorithm
+# Learning Algorithm: Value Function
 
 ### States-Value Dictionary
 
@@ -160,7 +160,7 @@ In this type of RL we can reward all the states used to win a game only after th
 ```
 
 
-# Transfer the Learning from different number_rows games
+# Transfer the Learning from different number_rows-game
 
 In order to re-use the policy from games with a smaller number of rows, we can simply add zeros in front of the keys.
 
@@ -195,7 +195,7 @@ def loadPolicy_from_previous_cases(self, file, n_previous_cases, n_rows):
 
 # Results of training
 
-Let's see the results for different number of rows = {3,4,5,6}. (num_games = 50'000)
+Let's see the results for different number of rows = {3,4,5,6}. (num_games = 10'000)
 In the game, p1 plays always as first player.
 
 We plot the mean reward of the previous 1000 games. We recall that if the agent win, it gets as reward +1; 
