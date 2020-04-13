@@ -253,6 +253,69 @@ In this particular example (NIM) we can only expect a jumpstart impr. or a learn
 a asymptotic impr. because we expect that our agent reach always the maximum he can afford, that is
 the knowledge of the perfect strategy.
 
+# Let's play agains computer
+
+```python
+---- Initial Board ----
+--------------
+ 1 # 
+ 2 # # 
+ 3 # # # 
+ 4 # # # # 
+ 5 # # # # # 
+-------------
+---- Computer turn ------
+--------------
+ 1 # # 
+ 2 # # # 
+ 3 # # # # 
+ 4 # # # # # 
+-------------
+---- Human turn ------
+--------------
+ 1 # # 
+ 2 # # 
+ 3 # # # 
+ 4 # # # # 
+-------------
+---- Computer turn ------
+--------------
+ 1 # # 
+ 2 # # 
+ 3 # # # 
+ 4 # # # 
+-------------
+---- Human turn ------
+--------------
+ 1 # # 
+ 2 # # # 
+ 3 # # # 
+-------------
+---- Computer turn ------
+--------------
+ 1 # # # 
+ 2 # # # 
+-------------
+---- Human turn ------
+--------------
+ 1 # 
+ 2 # # # 
+-------------
+---- Computer turn ------
+--------------
+ 1 # 
+ 2 # 
+-------------
+---- Human turn ------
+--------------
+ 1 # 
+-------------
+---- Computer turn ------
+--------------
+-------------
+computer wins!
+```
+
 # Result of transfer learning
 
 ## First approach
