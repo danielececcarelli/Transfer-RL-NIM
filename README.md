@@ -253,7 +253,7 @@ In this particular example (NIM) we can only expect a jumpstart impr. or a learn
 a asymptotic impr. because we expect that our agent reach always the maximum he can afford, that is
 the knowledge of the perfect strategy.
 
-# Let's play agains computer
+# Let's play against computer
 
 ```python
 ---- Initial Board ----
