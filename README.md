@@ -407,7 +407,7 @@ when ```divide = 1```, nothing change from the previous approach; while if ```di
 The result of this second approach (approach (b) ) is bigger: we get always a learning speed improvement and sometimes 
 also a jumpstart.
 
-# Comparison between the two different approach of Transfer Learning
+# Comparison between the two different approaches of Transfer Learning
 ### 6: Learn 6-rows game from scratch
 ### 6_from5_a : first approach
 ### 6_from5_b : second approach
@@ -421,3 +421,5 @@ also a jumpstart.
 ![prova_d](https://github.com/danielececcarelli/Transfer-Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_d.png)
 
 ![prova_e](https://github.com/danielececcarelli/Transfer-Reinforcement-Learning-for-NIM-Game/blob/master/images/learn5_vs_6_e.png)
+
+As we have already said, it is clear that the second approach (b, green line) is way better than the first approach and the baseline case: we get always a learning speed improvement and sometimes also a jumpstart.
